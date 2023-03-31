@@ -1,18 +1,13 @@
 import datetime
 import random
-import time
+
 import highrise
-
+import python_weather
+from highrise import BaseBot, User
 from random_word import RandomWords
-from highrise import Highrise, BaseBot, User
+
 from highrisehelpers import Helpers
-from dataclasses import dataclass
 
-
-def read_attribute_file(filepath):
-    with open(filepath, 'r') as f_object:
-        word_lst = f_object.read().split()
-    return word_lst
 
 
 def now_timestamp():
@@ -29,7 +24,6 @@ class Bot(BaseBot):
     def __init__(self):
         self.helpers = Helpers()
         self.random_word = RandomWords()
-        self.attributes = read_attribute_file('attributelist')
 
     async def random_teleport(self):
         randPos = self.helpers.getRandomPosition()
@@ -50,7 +44,6 @@ class Bot(BaseBot):
         a = await self.highrise.get_room_users()
         print(a)
         await self.offer()
-
 
     async def on_whisper(self, user: User, message: str) -> None:
         print(f'{now_timestamp()} | {user.username} [{user.id}] [whisper]: "{message}"')
@@ -82,6 +75,6 @@ class Bot(BaseBot):
 
     async def on_user_join(self, user: User) -> None:
         print(f'{now_timestamp()} | {user.username} [{user.id}] joined the room!')
-        await self.highrise.chat(message=f'Welcome {user.username}, looking {random.choice(self.attributes)} today!')
+        await self.highrise.chat(message=f'Welcome {user.username}, looking great today!')
 
     pass
