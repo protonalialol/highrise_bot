@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: highrisebot
+  labels:
+    app: highrisebot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: highrisebot
+  template:
+    metadata:
+      labels:
+        app: highrisebot
+    spec:
+      containers:
+      - name: highrisebot-container
+        image: protonalialol/highrise_bot:v1.0.0

@@ -4,13 +4,10 @@ FROM ubuntu:jammy
 ENV PYTHONUNBUFFERED 1
 
 # Install Python 3.11 and pip
-#RUN dpkg --add-architecture i386
 RUN apt-get update 
 RUN apt-get install -y python3.11
 RUN apt-get install -y python3.11-distutils
 RUN apt-get install -y python3-pip
-#RUN apt-get install -y wine
-#RUN apt-get install -y wine32
 
 # Set the working directory to /app
 WORKDIR /app
@@ -20,7 +17,6 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN python3.11 -m pip install --trusted-host pypi.python.org -r requirements.txt
-
 
 # Set the environment variable PYTHONUNBUFFERED to prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1

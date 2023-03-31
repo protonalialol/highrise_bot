@@ -2,19 +2,11 @@ import datetime
 import random
 import time
 import highrise
-import akinator
-import python_weather
 
 from random_word import RandomWords
 from highrise import Highrise, BaseBot, User
 from highrisehelpers import Helpers
 from dataclasses import dataclass
-
-
-@dataclass
-class AkinatorInstance:
-    AkinatorGame: akinator.Akinator
-    question: str
 
 
 def read_attribute_file(filepath):
@@ -38,7 +30,6 @@ class Bot(BaseBot):
         self.helpers = Helpers()
         self.random_word = RandomWords()
         self.attributes = read_attribute_file('attributelist')
-        self.akinatorGames = {}
 
     async def random_teleport(self):
         randPos = self.helpers.getRandomPosition()
@@ -64,24 +55,7 @@ class Bot(BaseBot):
     async def on_whisper(self, user: User, message: str) -> None:
         print(f'{now_timestamp()} | {user.username} [{user.id}] [whisper]: "{message}"')
 
-        if(user.id in self.akinatorGames):
-            self.akinatorGames[user.id].question = self.akinatorGames[user.id].AkinatorGame.answer(message)
-            print(self.akinatorGames[user.id].AkinatorGame.progression)
-            if (self.akinatorGames[user.id].AkinatorGame.progression > 80):
-                self.akinatorGames[user.id].AkinatorGame.win()
-                print(f'Is it {self.akinatorGames[user.id].AkinatorGame.first_guess["name"]}?')
-                await self.highrise.send_whisper(user_id=user.id, message=f'Is it {self.akinatorGames[user.id].AkinatorGame.first_guess["name"]}?')
-            else:
-                await self.highrise.send_whisper(user_id=user.id, message=self.akinatorGames[user.id].question)
-            return
-
         match message.lower():
-            case 'akinator':
-                self.akinatorGames[user.id] = AkinatorInstance(AkinatorGame=akinator.Akinator(), question="EMPTY")
-                print(self.akinatorGames[user.id].question)
-                self.akinatorGames[user.id].question = self.akinatorGames[user.id].AkinatorGame.start_game()
-                print(self.akinatorGames[user.id].question)
-                await self.highrise.send_whisper(user_id=user.id, message=self.akinatorGames[user.id].question)
             case 'i love you':
                 await self.highrise.send_whisper(user_id=user.id, message=f'I love you too <3')
             case 'weather':
