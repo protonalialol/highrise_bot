@@ -1,5 +1,5 @@
 # Use a slim Ubuntu image as the base
-FROM ubuntu:jammy
+FROM arm64v8/ubuntu:jammy
 
 ENV PYTHONUNBUFFERED 1
 
