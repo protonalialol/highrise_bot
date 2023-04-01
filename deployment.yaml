@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v1.0.2
+        image: protonalialol/highrise_bot:v1.0.3
