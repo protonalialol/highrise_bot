@@ -9,11 +9,14 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
-#RUN apt-get install vine -y
+
+# Set BOT_VERSION environment variable
+ARG BOT_VERSION
+ENV BOT_VERSION $BOT_VERSION
 
 # Set the environment variable PYTHONUNBUFFERED to prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
 # Set the entry point to run the Python application
 #ENTRYPOINT ["python", "main.py"]
-ENTRYPOINT "highrise" "demo:$BOT_TYPE" $ROOM_ID $API_KEY
+ENTRYPOINT "highrise" "bots:$BOT_TYPE" $ROOM_ID $API_KEY
