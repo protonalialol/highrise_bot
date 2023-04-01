@@ -1,4 +1,4 @@
-$version = "0.0.5"
+$version = "0.0.6"
 
 .\destroydeploy.ps1
 docker build -t highrisebot1 .
