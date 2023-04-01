@@ -16,12 +16,13 @@ spec:
     spec:
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:0.0.7-test
+        image: protonalialol/highrise_bot:0.0.8
         imagePullPolicy: Always
         env:
-        - name: test
-          value: value
-        - name: botMode
-          value: Bot
-        - name: testing
+        - name: BOT_TYPE
+          value: DemoBot
+        - name: ROOM_ID
           value: 63c08fb2d0187c1745407652
+        - name: API_KEY
+          value: 605989e0149119cb9095f303d86e43ea35eed73237fe52960c562800d8b277c5
+        

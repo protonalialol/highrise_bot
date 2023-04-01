@@ -1,4 +1,4 @@
-$version = "0.0.7-test"
+$version = "0.0.8"
 
 docker build -t highrisebot1 .
 docker tag highrisebot1 "protonalialol/highrise_bot:$version"

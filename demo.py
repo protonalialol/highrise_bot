@@ -4,16 +4,16 @@ from highrise import BaseBot, User
 from highrisehelpers import Helpers
 
 
-class Bot(BaseBot):
+class DemoBot(BaseBot):
     def __init__(self):
         self.helpers = Helpers()
         self.test()
 
     def test(self):
         print("Env vairables now:")
-        print(os.getenv('test'))
-        print(os.getenv('botMode'))
-        print(os.getenv('testing'))
+        print(os.getenv('BOT_TYPE'))
+        print(os.getenv('ROOM_ID'))
+        print(os.getenv('API_KEY'))
 
     async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
         await self.highrise.chat(message=f'Demo Bot started, have fun :)')
@@ -26,6 +26,7 @@ class Bot(BaseBot):
         await self.highrise.chat(message=f'You said {message}')
 
     async def on_whisper(self, user: User, message: str):
+        print(f'Whisper heard')
         self.helpers.log_whisper(user=user, message=message)
 
         match message.lower():

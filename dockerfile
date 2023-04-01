@@ -1,31 +1,19 @@
-# Use a slim Ubuntu image as the base
-FROM arm64v8/ubuntu:jammy
-
-ENV PYTHONUNBUFFERED 1
-
-# Install Python 3.11 and pip
-RUN apt-get update 
-RUN apt-get install -y python3.11
-RUN apt-get install -y python3.11-distutils
-RUN apt-get install -y python3-pip
+# Use an official Python runtime as a parent image
+FROM arm64v8/python:3.11.2-alpine3.16
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy the Python script into the container
+# Copy the current directory contents into the container at /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN python3.11 -m pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+#RUN apt-get install vine -y
 
 # Set the environment variable PYTHONUNBUFFERED to prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-ENV BotMode $botMode
-ENV BotEqualsMode=$botMode
-
-ENV TESTINGHERE=63c08fb2d0187c1745407652
-
-# Run the Python script when the container starts
-ENTRYPOINT ["python3", "main.py"]
-#ENTRYPOINT ["highrise", "demo:Bot", "63c08fb2d0187c1745407652", "605989e0149119cb9095f303d86e43ea35eed73237fe52960c562800d8b277c5"]
+# Set the entry point to run the Python application
+#ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT "highrise" "demo:$BOT_TYPE" $ROOM_ID $API_KEY
