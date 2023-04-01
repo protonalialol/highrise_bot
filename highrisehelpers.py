@@ -1,5 +1,6 @@
 import datetime
 import random
+
 from highrise import User
 
 class Helpers():

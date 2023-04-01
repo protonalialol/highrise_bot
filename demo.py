@@ -1,5 +1,4 @@
-import datetime
-
+import os
 import highrise
 from highrise import BaseBot, User
 from highrisehelpers import Helpers
@@ -8,6 +7,14 @@ from highrisehelpers import Helpers
 class Bot(BaseBot):
     def __init__(self):
         self.helpers = Helpers()
+        self.test()
+
+    def test(self):
+        print("Env vairables now:")
+        print(os.getenv('test'))
+        print(os.getenv('botMode'))
+        print(os.getenv('testing'))
+
     async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
         await self.highrise.chat(message=f'Demo Bot started, have fun :)')
         await self.highrise.chat(message=f'Send me some stuff UwU')

@@ -16,10 +16,12 @@ spec:
     spec:
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:0.0.6
+        image: protonalialol/highrise_bot:0.0.7-test
         imagePullPolicy: Always
         env:
         - name: test
           value: value
         - name: botMode
           value: Bot
+        - name: testing
+          value: 63c08fb2d0187c1745407652

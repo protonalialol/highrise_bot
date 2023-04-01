@@ -21,10 +21,11 @@ RUN python3.11 -m pip install --trusted-host pypi.python.org -r requirements.txt
 # Set the environment variable PYTHONUNBUFFERED to prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-ENV env_name $test
-ENV env_value $value
 ENV BotMode $botMode
+ENV BotEqualsMode=$botMode
+
+ENV TESTINGHERE=63c08fb2d0187c1745407652
 
 # Run the Python script when the container starts
-#ENTRYPOINT ["python3", "main.py"]
-ENTRYPOINT ["highrise", "demo:Bot", "63c08fb2d0187c1745407652", "605989e0149119cb9095f303d86e43ea35eed73237fe52960c562800d8b277c5"]
+ENTRYPOINT ["python3", "main.py"]
+#ENTRYPOINT ["highrise", "demo:Bot", "63c08fb2d0187c1745407652", "605989e0149119cb9095f303d86e43ea35eed73237fe52960c562800d8b277c5"]
