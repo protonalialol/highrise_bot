@@ -1,8 +1,11 @@
+import datetime
 import random
-from highrise import *
 
 
 class Helpers():
+    def now_timestamp(self):
+        return datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
+
     def getRandomPosition(self):
         return tuple[random.random() * 10, random.random() * 10, random.random() * 10]
 

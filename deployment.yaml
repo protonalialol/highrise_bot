@@ -16,5 +16,8 @@ spec:
     spec:
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v1.0.4
+        image: protonalialol/highrise_bot:0.0.5
         imagePullPolicy: Always
+        env:
+        - name: test
+          value: value

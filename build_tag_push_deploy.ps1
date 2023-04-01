@@ -1,6 +1,6 @@
-$version = "v1.0.4"
+$version = "0.0.5"
 
-kubectl delete deployment highrisebot
+.\destroydeploy.ps1
 docker build -t highrisebot1 .
 docker tag highrisebot1 "protonalialol/highrise_bot:$version"
 docker push "protonalialol/highrise_bot:$version"
