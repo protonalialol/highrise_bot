@@ -1,12 +1,16 @@
-import highrise
-from highrise import User
+from highrise import User, SessionMetadata
 
 from extendedbasebot import ExtendedBaseBot
-
+from highrisehelpers import Helpers
+from poke import PokeCommandHandler
 
 class PokeBot(ExtendedBaseBot):
-    async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
-        await super().on_start(session_metadata= highrise.SessionMetadata)
+    def __init__(self):
+        super().__init__()
+        self.PokeCommandHandler = PokeCommandHandler()
+
+    async def on_start(self, session_metadata: SessionMetadata) -> None:
+        await super().on_start(session_metadata= SessionMetadata)
         super().print_properties()
         await self.highrise.chat(message=f'{self.BOT_TYPE} {self.BOT_VERSION} started, have fun :)')
         pass
@@ -23,26 +27,11 @@ class PokeBot(ExtendedBaseBot):
                 exit(0)
         pass
 
-    async def whisper_help(self, user: User):
+    async def _whisper_help(self, user: User):
         await self.highrise.send_whisper(user_id=user.id, message= f'Help command!\r\n!poke help - Show this help')
         return
 
-    async def poke_handler(self, user: User, message: str):
-        self.helpers.log_debug(message=f'poke_handler called with {message} by user {user.username} [{user.id}]')
-        poke_command = message.replace("!poke", "").strip(' ')
-
-        self.helpers.log_debug(message=f'poke_command: "{poke_command}" by user {user.username} [{user.id}]')
-
-        match poke_command:
-            case "help":
-                self.helpers.log_info(message=f'"!poke help" initiated with "{poke_command}" by user {user.username} [{user.id}]')
-                await self.whisper_help(user=user)
-            case _:
-                self.helpers.log_info(message=f'default command (help) initiated with "{poke_command}" by user {user.username} [{user.id}]')
-                await self.whisper_help(user=user)
-
-        return
-
+    
     async def chat_handler(self, user: User, message: str):
         self.helpers.log_debug(message=f'chat_handler called with {message} by user {user.username} [{user.id}]')
 

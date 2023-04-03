@@ -18,7 +18,7 @@ spec:
         - name: myregistrykey
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v0.2.2
+        image: protonalialol/highrise_bot:v0.2.3
         imagePullPolicy: Always
         env:
         - name: BOT_TYPE
