@@ -20,7 +20,7 @@ class ExtendedBaseBot(BaseBot):
         self.BOT_ADMINISTRATOR_ID = os.getenv('BOT_ADMINISTRATOR_ID')
         self.ROOM_ID = os.getenv('ROOM_ID')
         self.helper = Helper()
-        self.Database = DatabaseHandler(db_file = f'/data/{self.BOT_TYPE}_sqlite.db', helper=self.helper)
+        self.database = DatabaseHandler(db_file =f'/data/{self.BOT_TYPE}_sqlite.db', helper=self.helper)
         signal.signal(signal.SIGTERM, self.handler)
         self.print_properties()
 
@@ -36,7 +36,7 @@ class ExtendedBaseBot(BaseBot):
     def handler(self, signum, frame):
         signame = signal.Signals(signum).name
         self.helper.log_debug(message=f'Signal handler called with signal {signame} ({signum})')
-        self.Database.close()
+        self.database.close()
         exit(0)
 
     async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:

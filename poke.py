@@ -7,10 +7,10 @@ from highrisehelpers import Helper
 import sqlite3
 
 class PokeCommandHandler():
-    def __init__(self, highrise: highrise, helper: Helper, database_connection: DatabaseHandler):
+    def __init__(self, highrise: highrise, helper: Helper, database: DatabaseHandler):
         self.highrise = highrise
         self.helper = helper
-        self.database_connection = database_connection
+        self.database = database
 
     async def _whisper_help(self, user: User):
         await self.highrise.send_whisper(user_id=user.id,
@@ -70,6 +70,11 @@ class PokeCommandHandler():
                 self.helper.log_info(
                     message=f'"!poke commands" initiated with "{poke_command}" by user {user.username} [{user.id}]')
                 await self._whisper_commands(user=user)
+            case "test":
+                self.helper.log_info(
+                    message=f'"!poke test" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                a = await self.database.get_area_from_location("locationtest")
+                self.helper.log_info(a)
             case _:
                 self.helper.log_info(
                     message=f'default command (commands) initiated with "{poke_command}" by user {user.username} [{user.id}]')
