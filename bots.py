@@ -1,52 +1,10 @@
-import os
 import highrise
-from highrise import BaseBot, User
-from highrisehelpers import Helpers
+from highrise import User
 
-import signal, os
+from extendedbasebot import ExtendedBaseBot
 
-class ExtendedBaseBot(BaseBot):
-    def __init__(self):
-        signal.signal(signal.SIGTERM, self.handler)
-        self.initialize_properties()
-        self.helpers = Helpers()
 
-    # Initialize base properties
-    def initialize_properties(self):
-        self.BOT_TYPE = os.getenv('BOT_TYPE')
-        self.BOT_VERSION = os.getenv('BOT_VERSION')
-        self.ROOM_ID = os.getenv('ROOM_ID')
-
-    # Print out base properties
-    def print_properties(self):
-        print(f'BOT_TYPE: {self.BOT_TYPE}')
-        print(f'BOT_VERSION: {self.BOT_VERSION}')
-        print(f'ROOM_ID: {self.ROOM_ID}')
-
-    # SIGTERM handler for pod termination
-    def handler(signum, frame):
-        signame = signal.Signals(signum).name
-        print(f'Signal handler called with signal {signame} ({signum})')
-        exit(0)
-
-    async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
-        print(f'ExtendedBaseBot initialized!')
-        pass
-
-    async def on_chat(self, user: User, message: str):
-        self.helpers.log_message(user= user, message=message)
-        pass
-
-    async def on_whisper(self, user: User, message: str):
-        self.helpers.log_whisper(user=user, message=message)
-        match message.lower():
-            case 'kill':
-                exit(0)
-        pass    
-
-    pass
-
-class InstanceBot(ExtendedBaseBot):
+class PokeBot(ExtendedBaseBot):
     async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
         await super().on_start(session_metadata= highrise.SessionMetadata)
         super().print_properties()
@@ -55,7 +13,7 @@ class InstanceBot(ExtendedBaseBot):
 
     async def on_chat(self, user: User, message: str):
         await super().on_chat(user= user, message= message)
-        await self.highrise.chat(message=f'Custom implementation here!')
+        await self.chat_handler(user=user, message=message)
         pass
 
     async def on_whisper(self, user: User, message: str):
@@ -64,5 +22,42 @@ class InstanceBot(ExtendedBaseBot):
             case 'kill':
                 exit(0)
         pass
-        
+
+    async def whisper_help(self, user: User):
+        await self.highrise.send_whisper(user_id=user.id, message= f'Help command!\r\n!poke help - Show this help')
+        return
+
+    async def poke_handler(self, user: User, message: str):
+        self.helpers.log_debug(message=f'poke_handler called with {message} by user {user.username} [{user.id}]')
+        poke_command = message.replace("!poke", "").strip(' ')
+
+        self.helpers.log_debug(message=f'poke_command: "{poke_command}" by user {user.username} [{user.id}]')
+
+        match poke_command:
+            case "help":
+                self.helpers.log_info(message=f'"!poke help" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                await self.whisper_help(user=user)
+            case _:
+                self.helpers.log_info(message=f'default command (help) initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                await self.whisper_help(user=user)
+
+        return
+
+    async def chat_handler(self, user: User, message: str):
+        self.helpers.log_debug(message=f'chat_handler called with {message} by user {user.username} [{user.id}]')
+
+        # Ignore other messages
+        if message[0] != '!':
+            self.helpers.log_debug(message=f'Not handling message {message} by {user.username} [{user.id}]')
+            return
+
+        command = message.split(' ')
+
+        match command[0]:
+            case "!poke":
+                await self.poke_handler(user=user, message=message)        
+            case _:
+                self.helpers.log_debug(message=f'Unrecognized command {command} by user {user.username} [{user.id}]')
+                await self.highrise.send_whisper(user_id=user.id, message= f'Say !poke to me!')
+
     pass

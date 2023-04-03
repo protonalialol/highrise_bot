@@ -14,13 +14,15 @@ spec:
       labels:
         app: highrisebot
     spec:
+      imagePullSecrets:
+        - name: myregistrykey
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v0.1-test
+        image: protonalialol/highrise_bot:v0.2.2
         imagePullPolicy: Always
         env:
         - name: BOT_TYPE
-          value: InstanceBot
+          value: PokeBot
         - name: ROOM_ID
           value: 63c08fb2d0187c1745407652
         - name: API_KEY
