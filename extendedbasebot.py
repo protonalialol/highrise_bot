@@ -7,7 +7,7 @@ import highrise
 from sqlite3 import Error
 from highrise import BaseBot, User
 
-from SQLiteDatabase import DataBaseHandler
+from SQLiteDatabase import DatabaseHandler
 
 from highrisehelpers import Helper
 
@@ -20,7 +20,7 @@ class ExtendedBaseBot(BaseBot):
         self.BOT_ADMINISTRATOR_ID = os.getenv('BOT_ADMINISTRATOR_ID')
         self.ROOM_ID = os.getenv('ROOM_ID')
         self.helper = Helper()
-        self.Database = SQLiteDatabase.DatabaseHandler(db_file = f'/data/{self.BOT_TYPE}_sqlite.db')
+        self.Database = DatabaseHandler(db_file = f'/data/{self.BOT_TYPE}_sqlite.db', helper=self.helper)
         signal.signal(signal.SIGTERM, self.handler)
         self.print_properties()
 

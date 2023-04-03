@@ -5,10 +5,13 @@ FROM arm64v8/python:3.11.2-alpine3.16
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY requirements.txt /app/requirements.txt
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Copy rest of the stuff
+COPY . /app
 
 # Set BOT_VERSION environment variable
 ARG BOT_VERSION

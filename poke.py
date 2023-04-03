@@ -1,10 +1,13 @@
 import highrise
 from highrise import User
+
+import SQLiteDatabase
+from SQLiteDatabase import DatabaseHandler
 from highrisehelpers import Helper
 import sqlite3
 
 class PokeCommandHandler():
-    def __init__(self, highrise: highrise, helper: Helper, database_connection: sqlite3.Connection):
+    def __init__(self, highrise: highrise, helper: Helper, database_connection: DatabaseHandler):
         self.highrise = highrise
         self.helper = helper
         self.database_connection = database_connection

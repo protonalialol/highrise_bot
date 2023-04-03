@@ -1,8 +1,10 @@
 import sqlite3
 from sqlite3 import Error
+from highrisehelpers import Helper
 
-class DataBaseHandler():
-    def __init__(self, db_file):
+class DatabaseHandler():
+    def __init__(self, db_file: str, helper: Helper):
+        self.helper = helper
         self.database_connection = self._create_connection(db_file)
         self.cursor = self.database_connection.cursor()
         self._create_tables()
@@ -15,14 +17,11 @@ class DataBaseHandler():
         except Error as e:
             print(e)
             exit(1)
-        finally:
-            if connection:
-                connection.close()
 
         return connection
 
     def _create_tables(self):
-        self.cursor.execute('''CREATE TABLE locations
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS locations
                      (location TEXT, area TEXT)''')
         self.database_connection.commit()
 
