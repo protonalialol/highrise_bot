@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: highrisebot
+  namespace: default
   labels:
     app: highrisebot
 spec:
@@ -18,8 +19,11 @@ spec:
         - name: myregistrykey
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v0.2.3
+        image: protonalialol/highrise_bot:v0.3
         imagePullPolicy: Always
+        volumeMounts:
+        - name: local-path-pvc
+          mountPath: /data
         env:
         - name: BOT_TYPE
           value: PokeBot
@@ -27,4 +31,26 @@ spec:
           value: 63c08fb2d0187c1745407652
         - name: API_KEY
           value: 605989e0149119cb9095f303d86e43ea35eed73237fe52960c562800d8b277c5
-        
+        - name: BOT_ADMINISTRATOR
+          value: Limamora
+        - name: BOT_ADMINISTRATOR_ID
+          value: 63c08fb2d0187c1745407651
+      volumes:
+      - name: local-path-pvc
+        persistentVolumeClaim:
+          claimName: local-path-pvc
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-path-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 256Mi

@@ -14,6 +14,14 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 ARG BOT_VERSION
 ENV BOT_VERSION $BOT_VERSION
 
+# Set BOT_ADMINISTRATOR environment variable
+ARG BOT_ADMINISTRATOR
+ENV BOT_ADMINISTRATOR $BOT_ADMINISTRATOR
+
+# Set BOT_ADMINISTRATOR_ID environment variable
+ARG BOT_ADMINISTRATOR_ID
+ENV BOT_ADMINISTRATOR_ID $BOT_ADMINISTRATOR_ID
+
 # Set the environment variable PYTHONUNBUFFERED to prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 

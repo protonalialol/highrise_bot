@@ -3,7 +3,7 @@ import random
 
 from highrise import User
 
-class Helpers():
+class Helper():
     def log_message(self, user: User, message: str):
         print(f'{self.now_timestamp()} ;;; [INFO] ;;; {user.username} [{user.id}] ;;; >>>{message}<<<')
 
