@@ -56,11 +56,10 @@ class DatabaseHandler():
         return area
 
     def _create_user_inventory(self, user: User):
-        self.cursor.execute('''INSERT INTO bags(userid, pokeballs, superballs, hyperballs, masterballs, baits, stones) VALUES (?, ?, ?, ?, ?, ?, ?, )''', (user.id, 0, 0, 0, 0, 0, 0, 0))
+        self.cursor.execute('''INSERT INTO bags(userid, pokeballs, superballs, hyperballs, masterballs, baits, stones) VALUES (?, ?, ?, ?, ?, ?, ?)''', (user.id, 0, 0, 0, 0, 0, 0))
         self.database_connection.commit()
         self.helper.log_debug(message=f'Created inventory for user {user.id} [{user.username}]')
         return
-
 
     def _create_user(self, user: User):
         self.cursor.execute('''INSERT INTO players(userid, username, amountTipped, affectionFactor) VALUES (?, ?, ?, ?)''', (user.id, user.username, 0, 0))
@@ -68,15 +67,25 @@ class DatabaseHandler():
         self.helper.log_debug(message=f'Created user {user.id} [{user.username}]')
         return
 
-    def _select_user_from_players(self, user: User):
-        self.cursor.execute('''SELECT userid FROM user where userid = ?''', (user.id,))
-        rows = self.cursor.fetchall()
-        return rows
+    def get_user_bag(self, user: User):
+        if self._is_user_existing(user=user):
+            if self._is_user_bag_existing(user=user):
+                return self._select_bag_from_bags(user=user)[0]
+            else:
+                self._create_user_inventory(user=user)
+                self.get_user_bag(user=user)
+        else:
+            self._create_user(user=user)
+            self.get_user_bag(user=user)
 
-    def _select_bag_from_bags(self, user: User):
-        self.cursor.execute('''SELECT userid FROM bags where userid = ?''', (user.id,))
-        rows = self.cursor.fetchall()
-        return rows
+
+    def get_area_from_location(self, location: Position):
+        if self._is_location_existing(location=location):
+            return self._select_area_from_location(location)[0][0]
+        else:
+            area = self._create_location(location=location)
+            return area
+
 
     def _is_user_existing(self, user: User):
         if len(self._select_user_from_players(user)) > 0:
@@ -90,29 +99,6 @@ class DatabaseHandler():
         else:
             return False
 
-    def _get_or_create_user(self, user: User):
-
-        return
-
-    def get_user_bag(self, user: User):
-        if self._is_user_existing:
-            if self._is_user_bag_existing:
-                return self._select_bag_from_bags(user=user)[0][0]
-            else:
-                self._create_user_inventory(user=user)
-                self.get_user_bag(user=user)
-        else:
-            self._create_user(user=user)
-            self.get_user_bag(user=user)
-
-
-    def get_area_from_location(self, location: Position):
-        if self._is_location_existing(location):
-            return self._select_area_from_location(location)[0][0]
-        else:
-            area = self._create_location(location)
-            return area
-
     def _is_location_existing(self, location: Position):
         if len(self._select_area_from_location(location)) > 0:
             return True
@@ -124,6 +110,16 @@ class DatabaseHandler():
 
     def _select_area_from_location(self, location: Position):
         self.cursor.execute('''SELECT area FROM locations where location = ?''', (self.helper.normalize_location(location),))
+        rows = self.cursor.fetchall()
+        return rows
+
+    def _select_user_from_players(self, user: User):
+        self.cursor.execute('''SELECT * FROM players where userid = ?''', (user.id,))
+        rows = self.cursor.fetchall()
+        return rows
+
+    def _select_bag_from_bags(self, user: User):
+        self.cursor.execute('''SELECT * FROM bags where userid = ?''', (user.id,))
         rows = self.cursor.fetchall()
         return rows
 

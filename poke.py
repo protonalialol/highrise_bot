@@ -11,6 +11,7 @@ from SQLiteDatabase import DatabaseHandler
 from highrisehelpers import Helper
 import sqlite3
 
+
 class PokeCommandHandler():
     def __init__(self, highrise: highrise, helper: Helper, database: DatabaseHandler):
         self.highrise = highrise
@@ -40,7 +41,7 @@ class PokeCommandHandler():
                                                  f'\t!poke bag - Show inventory\r\n'
                                                  f'\t!poke dex - Inspect Pokedex\r\n'
                                                  f'\t!poke help - Explain the game\r\n'
-                                                 )
+                                         )
         return
 
     async def _go(self, user: User):
@@ -71,7 +72,17 @@ class PokeCommandHandler():
             return "dark place"
 
     async def _bag(self, user: User):
-        self.database.
+        bag = self.database.get_user_bag(user=user)
+        self.helper.log_debug(message=bag)
+        await self.highrise.send_whisper(user_id=user.id,
+                                         message=f'User: {user.username}\r\n'
+                                                 f'\tPokeballs: {bag[1]}\r\n'
+                                                 f'\tSuperballs: {bag[2]}\r\n'
+                                                 f'\tHyperballs: {bag[3]}\r\n'
+                                                 f'\tMasterballs: {bag[4]}\r\n\r\n'
+                                                 f'\tBaits: {bag[5]}\r\n'
+                                                 f'\tStones: {bag[6]}\r\n'
+                                         )
         return
 
     async def command_handler(self, user: User, message: str):
@@ -114,6 +125,7 @@ class PokeCommandHandler():
                 await self._whisper_commands(user=user)
 
         return
+
 
 class PokemonCollection():
     def __init__(self):
@@ -279,10 +291,11 @@ class PokemonCollection():
             'Dragonite': {'location': 'Water', 'weight': 210.0},
             'Mewtwo': {'location': 'N/A', 'weight': 122.0},
             'Mew': {'location': 'N/A', 'weight': 4.0}
-    }
+        }
+
 
 class Pokemon():
-    def __init__(self, name: str, location: str, weight: float, legendary : bool = False):
+    def __init__(self, name: str, location: str, weight: float, legendary: bool = False):
         self.name = name
         self.location = location
         self.weight = weight
@@ -290,6 +303,8 @@ class Pokemon():
 
     def isLegendary(self):
         return self.legendary
+
+
 class PokemonLocation(Enum):
     GRASS = 1
     CAVE = 2
@@ -303,5 +318,3 @@ class PokemonLocation(Enum):
     THUNDER_HILL = 10
     MOON = 11
     SECRET_CAVE = 12
-
-

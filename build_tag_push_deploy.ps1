@@ -1,4 +1,4 @@
-$version = "v0.4"
+$version = "v0.4.1"
 
 .\destroydeploy.ps1
 
@@ -7,5 +7,5 @@ docker tag highrisebot1 "protonalialol/highrise_bot:$version"
 docker push "protonalialol/highrise_bot:$version"
 
 kubectl apply -f .\deployment.yaml
-Start-Sleep 12
+Start-Sleep 17
 kubectl logs -f deployment/highrisebot
