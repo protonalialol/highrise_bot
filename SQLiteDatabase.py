@@ -1,6 +1,7 @@
 import sqlite3
-from random import random
+import random
 from sqlite3 import Error
+from highrise import Position
 from highrisehelpers import Helper
 
 class DatabaseHandler():
@@ -27,20 +28,25 @@ class DatabaseHandler():
                      (location TEXT, area TEXT)''')
         self.database_connection.commit()
 
-    def _create_location(self, location):
-        self.cursor.execute('''INSERT INTO locations(location, area) VALUES (?, ?)''', (location, self.get_random_area()))
+    def _normalize_location(self, location: Position):
+        return f'{round(location.x, 1)}_{round(location.y, 1)}_{round(location.z, 1)}'
+
+    def _create_location(self, location: Position):
+        area = self.get_random_area()
+        self.cursor.execute('''INSERT INTO locations(location, area) VALUES (?, ?)''', (self._normalize_location(location), area))
         self.database_connection.commit()
-        return
+        self.helper.log_debug(message=f'{self._normalize_location(location)} {area}')
+        return area
 
-    def get_area_from_location(self, location: str):
+    def get_area_from_location(self, location: Position):
         if self._is_location_existing(location):
-            return self._select_area_from_location(location)[1]
+            return self._select_area_from_location(location)[0][0]
         else:
-            self._create_location(location)
-            self.get_area_from_location(location)
+            area = self._create_location(location)
+            return area
 
-    def _is_location_existing(self, location: str):
-        if len(self._select_area_from_location() > 0):
+    def _is_location_existing(self, location: Position):
+        if len(self._select_area_from_location(location)) > 0:
             return True
         else:
             return False
@@ -48,8 +54,9 @@ class DatabaseHandler():
     def get_random_area(self):
         return random.choice(self.areas)
 
-    def _select_area_from_location(self, location: str):
-        rows = self.cursor.execute('''SELECT area FROM locations where location = ?''', (location,))
+    def _select_area_from_location(self, location: Position):
+        self.cursor.execute('''SELECT area FROM locations where location = ?''', (self._normalize_location(location),))
+        rows = self.cursor.fetchall()
         return rows
 
     def close(self):

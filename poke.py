@@ -1,5 +1,5 @@
 import highrise
-from highrise import User
+from highrise import User, Position
 
 import SQLiteDatabase
 from SQLiteDatabase import DatabaseHandler
@@ -11,6 +11,7 @@ class PokeCommandHandler():
         self.highrise = highrise
         self.helper = helper
         self.database = database
+        self.room_users = None
 
     async def _whisper_help(self, user: User):
         await self.highrise.send_whisper(user_id=user.id,
@@ -38,9 +39,28 @@ class PokeCommandHandler():
         return
 
     async def _go(self, user: User):
-
+        await self._update_user_locations()
+        self.helper.log_debug(message=self.room_users)
+        location = self.database.get_area_from_location(self._get_current_user_location(current_user=user))
+        self.helper.log_debug(location)
         return
 
+    async def _update_user_locations(self):
+        self.room_users = await self.highrise.get_room_users()
+
+    def _get_current_user_location(self, current_user: User):
+        if self.room_users is None:
+            self.helper.log_debug(f'Room users is None!')
+            return "dark place"
+        else:
+            self.helper.log_debug(type(self.room_users))
+            for user in self.room_users.content:
+                self.helper.log_debug(f'{user[0]}_{user[1]}')
+                if user[0] == current_user:
+                    self.helper.log_debug(f'Location found for user {current_user}: {user[1]}!')
+                    return user[1]
+            self.helper.log_debug(f'Could not find location for user {current_user} in {self.room_users}!')
+            return "dark place"
 
     async def command_handler(self, user: User, message: str):
         self.helper.log_debug(message=f'command_handler called with "{message}" by user {user.username} [{user.id}]')
@@ -73,8 +93,7 @@ class PokeCommandHandler():
             case "test":
                 self.helper.log_info(
                     message=f'"!poke test" initiated with "{poke_command}" by user {user.username} [{user.id}]')
-                a = await self.database.get_area_from_location("locationtest")
-                self.helper.log_info(a)
+                return
             case _:
                 self.helper.log_info(
                     message=f'default command (commands) initiated with "{poke_command}" by user {user.username} [{user.id}]')

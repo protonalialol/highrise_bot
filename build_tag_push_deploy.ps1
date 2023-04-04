@@ -7,5 +7,5 @@ docker tag highrisebot1 "protonalialol/highrise_bot:$version"
 docker push "protonalialol/highrise_bot:$version"
 
 kubectl apply -f .\deployment.yaml
-Start-Sleep 20
+Start-Sleep 12
 kubectl logs -f deployment/highrisebot
