@@ -1,4 +1,4 @@
-$version = "v0.3.3"
+$version = "v0.4"
 
 .\destroydeploy.ps1
 

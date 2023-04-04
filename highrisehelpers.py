@@ -1,7 +1,7 @@
 import datetime
 import random
 
-from highrise import User
+from highrise import User, Position
 
 class Helper():
     def log_message(self, user: User, message: str):
@@ -37,4 +37,5 @@ class Helper():
     def getRandomPosition(self):
         return (random.uniform(0.0,7.5), 1.0, random.uniform(0.0,7.5))
 
-
+    def normalize_location(self, location: Position):
+        return f'{round(location.x, 1)}_{round(location.y, 1)}_{round(location.z, 1)}'

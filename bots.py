@@ -30,19 +30,20 @@ class PokeBot(ExtendedBaseBot):
         pass
 
     async def chat_handler(self, user: User, message: str):
-        self.helper.log_debug(message=f'chat_handler called with "{message}" by user {user.username} [{user.id}]')
+        lowered_message = message.lower()
+        self.helper.log_debug(message=f'chat_handler called with "{lowered_message}" by user {user.username} [{user.id}]')
 
         # Ignore other messages
         if message[0] != '!':
-            self.helper.log_debug(message=f'Not handling message "{message}" by {user.username} [{user.id}]')
+            self.helper.log_debug(message=f'Not handling message "{lowered_message}" by {user.username} [{user.id}]')
             return
 
-        command = message.split(' ')
+        command = lowered_message.split(' ')
 
         match command[0]:
             case "!poke":
                 self.helper.log_debug(message=f'!poke command invoked via "{command}" by user {user.username} [{user.id}]')
-                await self.PokeCommandHandler.command_handler(user=user, message=message)
+                await self.PokeCommandHandler.command_handler(user=user, message=lowered_message)
             case _:
                 self.helper.log_debug(message=f'Unrecognized command "{command}" by user {user.username} [{user.id}]')
                 await self.highrise.send_whisper(user_id=user.id, message=f'Say !poke help to me!')

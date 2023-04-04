@@ -19,7 +19,7 @@ spec:
         - name: myregistrykey
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v0.3.3
+        image: protonalialol/highrise_bot:v0.4
         imagePullPolicy: Always
         volumeMounts:
         - name: local-path-pvc
@@ -35,6 +35,7 @@ spec:
           value: Limamora
         - name: BOT_ADMINISTRATOR_ID
           value: 63c08fb2d0187c1745407651
+          
       volumes:
       - name: local-path-pvc
         persistentVolumeClaim:

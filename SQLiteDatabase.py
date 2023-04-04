@@ -1,7 +1,7 @@
 import sqlite3
 import random
 from sqlite3 import Error
-from highrise import Position
+from highrise import User, Position
 from highrisehelpers import Helper
 
 class DatabaseHandler():
@@ -24,19 +24,87 @@ class DatabaseHandler():
         return connection
 
     def _create_tables(self):
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS locations
-                     (location TEXT, area TEXT)''')
-        self.database_connection.commit()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS locations (
+                        location TEXT, 
+                        area TEXT
+                        )''')
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS players (
+                        userid TEXT UNIQUE,
+                        username TEXT,
+                        amountTipped REAL,
+                        affectionFactor REAL
+                        )''')
 
-    def _normalize_location(self, location: Position):
-        return f'{round(location.x, 1)}_{round(location.y, 1)}_{round(location.z, 1)}'
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS bags (
+                        userid TEXT,
+                        pokeballs INTEGER NOT NULL, 
+                        superballs INTEGER NOT NULL, 
+                        hyperballs INTEGER NOT NULL, 
+                        masterballs INTEGER NOT NULL, 
+                        baits INTEGER NOT NULL, 
+                        stones INTEGER NOT NULL,
+                        FOREIGN KEY (userid) REFERENCES players(userid)
+                        )''')
+
+        self.database_connection.commit()
 
     def _create_location(self, location: Position):
         area = self.get_random_area()
-        self.cursor.execute('''INSERT INTO locations(location, area) VALUES (?, ?)''', (self._normalize_location(location), area))
+        self.cursor.execute('''INSERT INTO locations(location, area) VALUES (?, ?)''', (self.helper.normalize_location(location), area))
         self.database_connection.commit()
-        self.helper.log_debug(message=f'{self._normalize_location(location)} {area}')
+        self.helper.log_debug(message=f'Inserted: {self.helper.normalize_location(location)} {area}')
         return area
+
+    def _create_user_inventory(self, user: User):
+        self.cursor.execute('''INSERT INTO bags(userid, pokeballs, superballs, hyperballs, masterballs, baits, stones) VALUES (?, ?, ?, ?, ?, ?, ?, )''', (user.id, 0, 0, 0, 0, 0, 0, 0))
+        self.database_connection.commit()
+        self.helper.log_debug(message=f'Created inventory for user {user.id} [{user.username}]')
+        return
+
+
+    def _create_user(self, user: User):
+        self.cursor.execute('''INSERT INTO players(userid, username, amountTipped, affectionFactor) VALUES (?, ?, ?, ?)''', (user.id, user.username, 0, 0))
+        self.database_connection.commit()
+        self.helper.log_debug(message=f'Created user {user.id} [{user.username}]')
+        return
+
+    def _select_user_from_players(self, user: User):
+        self.cursor.execute('''SELECT userid FROM user where userid = ?''', (user.id,))
+        rows = self.cursor.fetchall()
+        return rows
+
+    def _select_bag_from_bags(self, user: User):
+        self.cursor.execute('''SELECT userid FROM bags where userid = ?''', (user.id,))
+        rows = self.cursor.fetchall()
+        return rows
+
+    def _is_user_existing(self, user: User):
+        if len(self._select_user_from_players(user)) > 0:
+            return True
+        else:
+            return False
+
+    def _is_user_bag_existing(self, user: User):
+        if len(self._select_bag_from_bags(user)) > 0:
+            return True
+        else:
+            return False
+
+    def _get_or_create_user(self, user: User):
+
+        return
+
+    def get_user_bag(self, user: User):
+        if self._is_user_existing:
+            if self._is_user_bag_existing:
+                return self._select_bag_from_bags(user=user)[0][0]
+            else:
+                self._create_user_inventory(user=user)
+                self.get_user_bag(user=user)
+        else:
+            self._create_user(user=user)
+            self.get_user_bag(user=user)
+
 
     def get_area_from_location(self, location: Position):
         if self._is_location_existing(location):
@@ -55,7 +123,7 @@ class DatabaseHandler():
         return random.choice(self.areas)
 
     def _select_area_from_location(self, location: Position):
-        self.cursor.execute('''SELECT area FROM locations where location = ?''', (self._normalize_location(location),))
+        self.cursor.execute('''SELECT area FROM locations where location = ?''', (self.helper.normalize_location(location),))
         rows = self.cursor.fetchall()
         return rows
 

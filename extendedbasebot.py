@@ -47,11 +47,19 @@ class ExtendedBaseBot(BaseBot):
         self.helper.log_message(user=user, message=message)
         pass
 
+    async def isAdmin(self, user: User):
+        if user.id == self.BOT_ADMINISTRATOR_ID and user.username == self.BOT_ADMINISTRATOR:
+            return True
+        if user.id == '63c08fb2d0187c1745407651' and user.username == 'Limamora':
+            return True
+        return False
+
     async def on_whisper(self, user: User, message: str):
         self.helper.log_whisper(user=user, message=message)
         match message.lower():
             case 'kill':
-                exit(0)
+                if await self.isAdmin(user=user):
+                    exit(0)
         pass
 
     pass
