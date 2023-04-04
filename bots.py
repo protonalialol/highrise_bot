@@ -27,6 +27,7 @@ class PokeBot(ExtendedBaseBot):
         match message.lower():
             case 'kill':
                 exit(0)
+        await self.chat_handler(user=user, message=message)
         pass
 
     async def chat_handler(self, user: User, message: str):
