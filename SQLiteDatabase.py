@@ -67,25 +67,31 @@ class DatabaseHandler():
         self.helper.log_debug(message=f'Created user {user.id} [{user.username}]')
         return
 
-    def get_user_bag(self, user: User):
+    def get_or_create_user_bag(self, user: User):
         if self._is_user_existing(user=user):
             if self._is_user_bag_existing(user=user):
                 return self._select_bag_from_bags(user=user)[0]
             else:
                 self._create_user_inventory(user=user)
-                self.get_user_bag(user=user)
+                self.get_or_create_user_bag(user=user)
         else:
             self._create_user(user=user)
-            self.get_user_bag(user=user)
+            self.get_or_create_user_bag(user=user)
+
+    def get_or_create_user(self, user: User):
+        if self._is_user_existing(user=user):
+            return self._select_user_from_players(user=user)[0]
+        else:
+            self._create_user(user=user)
+            self.get_or_create_user(user=user)
 
 
-    def get_area_from_location(self, location: Position):
+    def get_or_create_area_from_location(self, location: Position):
         if self._is_location_existing(location=location):
             return self._select_area_from_location(location)[0][0]
         else:
             area = self._create_location(location=location)
             return area
-
 
     def _is_user_existing(self, user: User):
         if len(self._select_user_from_players(user)) > 0:
@@ -125,4 +131,3 @@ class DatabaseHandler():
 
     def close(self):
         self.database_connection.close()
-

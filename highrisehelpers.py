@@ -5,16 +5,19 @@ from highrise import User, Position
 
 class Helper():
     def log_message(self, user: User, message: str):
-        print(f'{self.now_timestamp()} ;;; [INFO] ;;; {user.username} [{user.id}] ;;; >>>{message}<<<')
+        print(f'{self.now_timestamp()} ;;; [INFO ] ;;; {user.username} [{user.id}] ;;; >>>{message}<<<')
 
     def log_whisper(self, user: User, message: str):
-        print(f'{self.now_timestamp()} ;;; [INFO] ;;; {user.username} [{user.id}] [whisper] ;;; >>>{message}<<<')
+        print(f'{self.now_timestamp()} ;;; [INFO ] ;;; {user.username} [{user.id}] [whisper] ;;; >>>{message}<<<')
 
     def log_debug(self, message: str):
         print(f'{self.now_timestamp()} ;;; [DEBUG] ;;; {message}')
 
     def log_info(self, message: str):
-        print(f'{self.now_timestamp()} ;;; [INFO] ;;; {message}')
+        print(f'{self.now_timestamp()} ;;; [INFO ] ;;; {message}')
+
+    def log_error(self, message: str):
+        print(f'{self.now_timestamp()} ;;; [ERROR] ;;; {message}')
 
     def now_timestamp(self):
         return datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")

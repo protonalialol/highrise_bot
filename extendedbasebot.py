@@ -1,3 +1,4 @@
+import logging
 import os
 import signal
 import sqlite3
@@ -21,6 +22,7 @@ class ExtendedBaseBot(BaseBot):
         self.ROOM_ID = os.getenv('ROOM_ID')
         self.helper = Helper()
         self.database = DatabaseHandler(db_file =f'/data/{self.BOT_TYPE}_sqlite.db', helper=self.helper)
+        #self.database = DatabaseHandler(db_file=f'D:\\temp\\{self.BOT_TYPE}_sqlite.db', helper=self.helper)
         signal.signal(signal.SIGTERM, self.handler)
         self.print_properties()
 
