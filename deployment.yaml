@@ -19,7 +19,7 @@ spec:
         - name: myregistrykey
       containers:
       - name: highrisebot-container
-        image: protonalialol/highrise_bot:v0.4.4
+        image: protonalialol/highrise_bot:v0.4.5
         imagePullPolicy: Always
         volumeMounts:
         - name: local-path-pvc

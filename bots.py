@@ -14,6 +14,7 @@ class PokeBot(ExtendedBaseBot):
     async def on_start(self, session_metadata: highrise.SessionMetadata) -> None:
         await super().on_start(session_metadata=highrise.SessionMetadata)
         self.PokeCommandHandler = PokeCommandHandler(highrise=self.highrise, helper=self.helper, database = self.database)
+        self.helper.log_debug(message=f'{__class__.__name__} initialized!')
         await self.highrise.chat(message=f'{self.BOT_TYPE} {self.BOT_VERSION} started, have fun :)')
         pass
 
