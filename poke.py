@@ -46,7 +46,7 @@ class PokeCommandHandler():
                         f'\t!poke buy - Buy items\r\n'
                         f'\t!poke bag - Show inventory\r\n'
                         f'\t!poke dex - Inspect Pokedex\r\n'
-                        f'\t!poke help - Explain the game\r\n'
+                        f'\t!poke help - Explain the game'
             )
         except Exception as e:
             self.helper.log_error(f"Unexpected {e=}, {type(e)=}")
@@ -76,10 +76,8 @@ class PokeCommandHandler():
         self.helper.log_debug(f'Searching for Pokemon in {location}...')
         await self.highrise.send_whisper(user_id=user.id, message=f'Searching for Pokemon in {location}...')
         await asyncio.sleep(5)
-        await self.highrise.send_whisper(user_id=user.id, message=f'Found a Pikachu!')
-        await asyncio.sleep(5)
-        await self.highrise.send_whisper(user_id=user.id, message=f'Kidding, searching pokemon shall be part of PokeBot 0.5!')
-
+        await self.highrise.send_whisper(user_id=user.id,
+                                         message=f'Kidding, searching pokemon shall be part of PokeBot 0.5!')
         return
 
     async def _bag(self, user: User):
@@ -94,7 +92,7 @@ class PokeCommandHandler():
                         f'\tHyperballs: {bag[3]}\r\n'
                         f'\tMasterballs: {bag[4]}\r\n\r\n'
                         f'\tBaits: {bag[5]}\r\n'
-                        f'\tStones: {bag[6]}\r\n'
+                        f'\tStones: {bag[6]}'
             )
         except Exception as e:
             self.helper.log_error(f"Unexpected {e=}, {type(e)=}")
