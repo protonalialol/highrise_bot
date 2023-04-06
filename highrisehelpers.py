@@ -16,6 +16,9 @@ class Helper():
     def log_info(self, message: str):
         print(f'{self.now_timestamp()} ;;; [INFO ] ;;; {message}')
 
+    def log_command(self, mapped_command: str, input_command: str, user: User):
+        self.log_info(message=f'"{mapped_command}" initiated with "{input_command}" by user {user.username} [{user.id}]')
+
     def log_error(self, message: str):
         print(f'{self.now_timestamp()} ;;; [ERROR] ;;; {message}')
 

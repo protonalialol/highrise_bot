@@ -21,14 +21,16 @@ class PokeCommandHandler():
 
     async def _whisper_help(self, user: highrise.User):
         try:
-            await self.highrise.send_whisper(user_id=user.id,
-                                             message=f'Welcome to PokeBot :)\r\n'
-                                                     f'Catch Pokemon and collect them all.\r\n\r\n'
-                                                     f'How to play:\r\n'
-                                                     f'\t 1. Locate yourself in the room\r\n'
-                                                     f'\t 2. Attract Pokemon with "!poke go"\r\n'
-                                                     f'\t 3. Throw balls with "!poke ball"\r\n\r\n'
-                                                     f'Find more different Pokemon by moving inside the room.')
+            await self.highrise.send_whisper(
+                user_id=user.id,
+                message=    f'Welcome to PokeBot :)\r\n'
+                            f'Catch Pokemon and collect them all.\r\n\r\n'
+                            f'How to play:\r\n'
+                            f'\t 1. Locate yourself in the room\r\n'
+                            f'\t 2. Attract Pokemon with "!poke go"\r\n'
+                            f'\t 3. Throw balls with "!poke ball"\r\n\r\n'
+                            f'Find more different Pokemon by moving inside the room.'
+            )
         except Exception as e:
             self.helper.log_error(f"Unexpected {e=}, {type(e)=}")
 
@@ -36,16 +38,17 @@ class PokeCommandHandler():
 
     async def _whisper_commands(self, user: highrise.User):
         try:
-            await self.highrise.send_whisper(user_id=user.id,
-                                             message=f'Commands:\r\n'
-                                                     f'\t!poke go - Find Pokemon\r\n'
-                                                     f'\t!poke ball - Throw Pokeball\r\n'
-                                                     f'\t!poke shop - Show offers\r\n'
-                                                     f'\t!poke buy - Buy items\r\n'
-                                                     f'\t!poke bag - Show inventory\r\n'
-                                                     f'\t!poke dex - Inspect Pokedex\r\n'
-                                                     f'\t!poke help - Explain the game\r\n'
-                                             )
+            await self.highrise.send_whisper(
+                user_id=user.id,
+                message=    f'Commands:\r\n'
+                            f'\t!poke go - Find Pokemon\r\n'
+                            f'\t!poke ball - Throw Pokeball\r\n'
+                            f'\t!poke shop - Show offers\r\n'
+                            f'\t!poke buy - Buy items\r\n'
+                            f'\t!poke bag - Show inventory\r\n'
+                            f'\t!poke dex - Inspect Pokedex\r\n'
+                            f'\t!poke help - Explain the game\r\n'
+            )
         except Exception as e:
             self.helper.log_error(f"Unexpected {e=}, {type(e)=}")
 
@@ -82,15 +85,16 @@ class PokeCommandHandler():
         bag = self.database.get_or_create_user_bag(user=user)
         self.helper.log_debug(message=bag)
         try:
-            await self.highrise.send_whisper(user_id=user.id,
-                                             message=f'User: {user.username}\r\n'
-                                                     f'\tPokeballs: {bag[1]}\r\n'
-                                                     f'\tSuperballs: {bag[2]}\r\n'
-                                                     f'\tHyperballs: {bag[3]}\r\n'
-                                                     f'\tMasterballs: {bag[4]}\r\n\r\n'
-                                                     f'\tBaits: {bag[5]}\r\n'
-                                                     f'\tStones: {bag[6]}\r\n'
-                                             )
+            await self.highrise.send_whisper(
+                user_id=user.id,
+                message=    f'User: {user.username}\r\n'
+                            f'\tPokeballs: {bag[1]}\r\n'
+                            f'\tSuperballs: {bag[2]}\r\n'
+                            f'\tHyperballs: {bag[3]}\r\n'
+                            f'\tMasterballs: {bag[4]}\r\n\r\n'
+                            f'\tBaits: {bag[5]}\r\n'
+                            f'\tStones: {bag[6]}\r\n'
+            )
         except Exception as e:
             self.helper.log_error(f"Unexpected {e=}, {type(e)=}")
 
@@ -112,45 +116,33 @@ class PokeCommandHandler():
         self.helper.log_debug(message=f'command_handler called with "{message}" by user {user.username} [{user.id}]')
         poke_command = message.replace("!poke", "").strip(' ')
 
-        self.helper.log_debug(message=f'poke_command: "{poke_command}" by user {user.username} [{user.id}]')
-
         match poke_command.lower():
             case "go":
-                self.helper.log_info(
-                    message=f'"!poke go" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke go", input_command=poke_command, user=user)
                 await self._go(user=user)
             case "ball":
-                self.helper.log_info(
-                    message=f'"!poke ball" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke ball", input_command=poke_command, user=user)
                 await self._ball(user=user)
             case "shop":
-                self.helper.log_info(
-                    message=f'"!poke shop" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke shop", input_command=poke_command, user=user)
                 await self._shop(user=user)
             case "buy":
-                self.helper.log_info(
-                    message=f'"!poke buy" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke buy", input_command=poke_command, user=user)
                 await self._buy(user=user)
             case "bag":
-                self.helper.log_info(
-                    message=f'"!poke bag" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke bag", input_command=poke_command, user=user)
                 await self._bag(user=user)
             case "dex":
-                self.helper.log_info(
-                    message=f'"!poke dex" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke dex", input_command=poke_command, user=user)
                 await self._dex(user=user)
             case "help":
-                self.helper.log_info(
-                    message=f'"!poke help" initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="!poke help", input_command=poke_command, user=user)
                 await self._whisper_help(user=user)
             case _:
-                self.helper.log_info(
-                    message=f'default command (commands) initiated with "{poke_command}" by user {user.username} [{user.id}]')
+                self.helper.log_command(mapped_command="default", input_command=poke_command, user=user)
                 await self._whisper_commands(user=user)
 
         return
-
-
 
 
 class PokemonCollection():
