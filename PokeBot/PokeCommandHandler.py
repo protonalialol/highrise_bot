@@ -5,12 +5,8 @@ from enum import Enum
 import highrise
 from highrise import User, Position
 
-import SQLiteDatabase
-import poke
 from SQLiteDatabase import DatabaseHandler
-from highrisehelpers import Helper
-import sqlite3
-
+from Helpers import Helper
 
 class PokeCommandHandler():
     def __init__(self, highrise: highrise, helper: Helper, database: DatabaseHandler):
@@ -322,23 +318,9 @@ class Pokemon():
         return self.legendary
 
 
-class Player():
-    def __init__(self, user: User):
-        self.userid = user.id
-        self.username = user.username
-        self.amountTipped = 0.0
-        self.affectionFactor = 0.0
 
 
-class Bag():
-    def __init__(self, user: User):
-        self.userid = user.id
-        self.pokeballs = 0
-        self.superballs = 0
-        self.hyperballs = 0
-        self.masterballs = 0
-        self.baits = 0
-        self.stones = 0
+
 
 
 class PokemonLocation(Enum):

@@ -2,7 +2,7 @@ import sqlite3
 import random
 from sqlite3 import Error
 from highrise import User, Position
-from highrisehelpers import Helper
+from Helpers import Helper
 
 class DatabaseHandler():
     def __init__(self, db_file: str, helper: Helper):

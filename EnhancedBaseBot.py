@@ -10,7 +10,7 @@ from highrise import BaseBot, User
 
 from SQLiteDatabase import DatabaseHandler
 
-from highrisehelpers import Helper
+from Helpers import Helper
 
 
 class ExtendedBaseBot(BaseBot):

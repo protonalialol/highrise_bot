@@ -1,8 +1,8 @@
 import highrise
 from highrise import User
 
-from extendedbasebot import ExtendedBaseBot
-from poke import PokeCommandHandler
+from EnhancedBaseBot import ExtendedBaseBot
+from PokeBot.PokeCommandHandler import PokeCommandHandler
 
 class PokeBot(ExtendedBaseBot):
     def __init__(self):

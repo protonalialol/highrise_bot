@@ -30,4 +30,4 @@ ENV PYTHONUNBUFFERED 1
 
 # Set the entry point to run the Python application
 #ENTRYPOINT ["python", "main.py"]
-ENTRYPOINT "highrise" "bots:$BOT_TYPE" $ROOM_ID $API_KEY
+ENTRYPOINT "highrise" "Bots:$BOT_TYPE" $ROOM_ID $API_KEY

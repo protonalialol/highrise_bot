@@ -1,7 +1,7 @@
 import unittest
 import sqlite3
 from highrise import User
-from highrisehelpers import Helper
+from Helpers import Helper
 from unittest.mock import MagicMock
 
 from SQLiteDatabase import DatabaseHandler
